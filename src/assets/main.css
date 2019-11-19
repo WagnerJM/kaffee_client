@@ -271,6 +271,15 @@ button:hover {
 .icon-btn:hover {
   color: #0184f6;
   cursor: pointer;
+  
+}
+
+.icon-btn-bg {
+  background-color: var(--primary);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+  0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  padding: 5px;
 }
 
 /* The Modal (background) */
@@ -487,3 +496,4 @@ nav label:active {
   width: 250px;
   border: 1px solid #ddd;
 }
+

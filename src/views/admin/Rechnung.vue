@@ -1,29 +1,29 @@
 <template>
   <div class="container">
     <h1>Rechnung</h1>
-    <button >User-Daten</button>
-    <button>Start </button>
+    <button @click="getUserData4Invoice">User-Daten</button>
+    <button>Start</button>
     <FlashMessage></FlashMessage>
     <div class="flex-container">
       <table>
         <thead>
-          <td>
-
-          </td>
           <td>
             Username
           </td>
           <td>
             Anzahl
           </td>
+          <td>
+            Betrag
+          </td>
+          <td>
+
+          </td>
         </thead>
         <tbody>
-          <tr>
-            <td>
-              <input type="checkbox" name="" id="" checked>
-            </td>
-            <td> Admin </td>
-            <td><i class="material-icons icon-btn" >add</i>  0  <i class="material-icons icon-btn" >remove</i></td>
+          <tr v-for="(user, i) in this.$store.state.users" :key="i">
+            <td> {{user.username}} </td>
+            <td><i class="material-icons icon-btn icon-btn-bg" >remove</i> {{user.coffee_count}} <i class="material-icons icon-btn icon-btn-bg" >add</i></td>
           </tr>
         </tbody>
       </table>
@@ -37,16 +37,12 @@ import http from "../../axios-instance";
 
 export default {
   created() {
-    this.$store.dispatch("");
-  },
-  computed: {
-    systemSettings() {
-      return this.$store.getters[""];
-    }
+    
   },
   name: "system",
   data() {
     return {
+      userData: {},
       edit: false,
       editedItem: {
        
@@ -58,6 +54,18 @@ export default {
     };
   },
   methods: {
+    getUserData4Invoice() {
+     http.get("/user").then(res => {
+        this.userData = res.data;
+        
+      });
+    },
+    addKaffee() {
+      
+    },
+    removeKaffee(){
+
+    },
     editItem(settings) {
       this.$modal.show("settings");
       this.editedItem = Object.assign({}, settings);

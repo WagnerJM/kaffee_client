@@ -11,6 +11,7 @@
       <label>Password</label>
       <input type="password" name="password" placeholder="Password..." v-model="password">
       <button @click="register">Registrieren</button>
+      <button @click="navigate('/admin/users')">Zurück</button>
     </form>
   </div>
 </template>
@@ -24,6 +25,9 @@ export default {
     password: ""
   }),
   methods: {
+     navigate(route) {
+      this.$router.push(route);
+    },
     register() {
       const formData = {
         username: this.username,

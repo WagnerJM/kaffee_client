@@ -11,7 +11,7 @@
 
     <div class="card">
       <div class="card-container">
-        <h2>Betrag: {{ this.$store.state.user.coffee_count * this.$store.state.system_settings.kaffee_preis}} €</h2>
+        <h2>Betrag: {{ betrag }} €</h2>
 
       </div>
     </div>
@@ -32,6 +32,11 @@
 <script>
 import http from "../../axios-instance";
 export default {
+  computed: {
+    betrag() {
+      return this.$store.state.user.coffee_count * this.$store.state.system_settings.kaffee_preis
+    }
+  },
   methods: {
     navigate(route) {
       this.$router.push(route);
