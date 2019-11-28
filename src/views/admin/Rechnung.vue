@@ -1,100 +1,64 @@
 <template>
   <div class="container">
-    <h1>Rechnung</h1>
-    <button @click="getUserData4Invoice">User-Daten</button>
-    <button>Start</button>
     <FlashMessage></FlashMessage>
+    <h1>Rechnung</h1>
     <div class="flex-container">
-      <table>
-        <thead>
-          <td>
-            Username
-          </td>
-          <td>
-            Anzahl
-          </td>
-          <td>
-            Betrag
-          </td>
-          <td>
-
-          </td>
-        </thead>
-        <tbody>
-          <tr v-for="(user, i) in this.$store.state.users" :key="i">
-            <td> {{user.username}} </td>
-            <td><i class="material-icons icon-btn icon-btn-bg" >remove</i> {{user.coffee_count}} <i class="material-icons icon-btn icon-btn-bg" >add</i></td>
-          </tr>
-        </tbody>
-      </table>
-      
+        <button @click="start">Start</button>
+        <table>
+            <thead>
+                <td></td>
+                <td>Username</td>
+                <td>Kaffee-Anzahl</td>
+            </thead>
+            <tbody>
+                <tr v-for="(user, i) in this.$store.state.users" :key="i">
+                    <td>
+                        <input type="checkbox" name="user" :id="user.id" :value="user" v-model="selected">
+                    </td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.coffee_count}}</td>
+                </tr>
+            </tbody>
+        </table>
+            {{selected}}
     </div>
+
   </div>
 </template>
 
 <script>
 import http from "../../axios-instance";
-
 export default {
-  created() {
-    
+    created() {
+    this.$store.dispatch("GET_ALL_USER");
   },
-  name: "system",
-  data() {
-    return {
-      userData: {},
-      edit: false,
-      editedItem: {
-       
-      },
-
-      default_settings: {
-        
-      }
-    };
+  computed: {
+     
   },
+  
   methods: {
-    getUserData4Invoice() {
-     http.get("/user").then(res => {
-        this.userData = res.data;
+    start() {
+        const formData = this.selected;
+        console.log(formData);
         
-      });
-    },
-    addKaffee() {
-      
-    },
-    removeKaffee(){
-
-    },
-    editItem(settings) {
-      this.$modal.show("settings");
-      this.editedItem = Object.assign({}, settings);
-    },
-    save() {
-      const formData = {
-        system_email: this.editedItem.system_email,
-        email_password: this.editedItem.email_password,
-        smtp_host: this.editedItem.smtp_host,
-        smtp_port: this.editedItem.smtp_port,
-        email_tls: this.editedItem.email_tls,
-        framesize: this.editedItem.framesize,
-        driver_path: this.editedItem.driver_path,
-        profile_path: this.editedItem.profile_path
-      };
-      http
-        .put("/system/setting", formData)
-        .then(res => {
-          this.$store.commit("setSettings", res.data);
-          this.flashMessage.success({
-            title: "Speichern",
-            message: "Einstellungen wurden erfolgreich gespeichert"
-          });
+        http.put("/admin/rechnungslauf", formData)
+        .then(res =>{
+            this.flashMessage.success({
+                titel: "Erfolg",
+                message: "Der Rechnungslauf wurde erfolgreich erstellt."
+            })
         })
         .catch(error => {
           this.flashMessage.error({ titel: "Error", message: error });
         });
-      this.$modal.hide("settings");
     }
+  },
+  data() {
+    return {
+        selected: [],
+        allSelected: false,
+        
+    };
   }
 };
 </script>
